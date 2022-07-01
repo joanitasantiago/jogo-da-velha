@@ -3,7 +3,7 @@
 #include "print.h"
 
 /* jogada do player X */
-void player1Move(char board[BOARD_ROWS][BOARD_COLUMNS])
+void player1Move(int *moves_counter, char board[BOARD_ROWS][BOARD_COLUMNS])
 {
     int new_row, new_column, position, validation;
     printf("JOGADOR X: Informe a [LINHA] e a [COLUNA] que deseja fazer sua jogada >>\t");
@@ -26,10 +26,11 @@ void player1Move(char board[BOARD_ROWS][BOARD_COLUMNS])
         }
     }
     board[new_row][new_column] = 'X';
+    *moves_counter = *moves_counter + 1;
 }
 
 /* jogada do player O */
-void player2Move(char board[BOARD_ROWS][BOARD_COLUMNS])
+void player2Move(int *moves_counter, char board[BOARD_ROWS][BOARD_COLUMNS])
 {
     int new_row, new_column, validation;
     printf("JOGADOR O: Informe a [LINHA] e a [COLUNA] que deseja fazer sua jogada >>\t");
@@ -52,6 +53,7 @@ void player2Move(char board[BOARD_ROWS][BOARD_COLUMNS])
         }
     }
     board[new_row][new_column] = 'O';
+    *moves_counter = *moves_counter + 1;
 }
 
 /* checa se a jogada foi válida */
@@ -73,29 +75,50 @@ int checkValidMove(int row, int column, char board[BOARD_ROWS][BOARD_COLUMNS])
 }
 
 /* checa se houve vitória em alguma linha, coluna ou diagonal */
-int checkWin(int controller, char board[BOARD_ROWS][BOARD_COLUMNS])
+void checkWin(int *player1score, int *player2score, int *loop_control, int moves_counter, char board[BOARD_ROWS][BOARD_COLUMNS])
 {
-    controller = 0; // no win, keep with the loop in the main function
-    for (int i = 0; i < 3; i++)
+    if (moves_counter > 4) /* só verifica se tiver o mínimo de 4 jogadas */
     {
-        if (((board[i][0] == 'X') && (board[i][1] == 'X') && (board[i][2] == 'X')) || ((board[0][i] == 'X') && (board[1][i] == 'X') && (board[2][i] == 'X')))
+        for (int i = 0; i < 3; i++) /*checa se houve vitória por linha ou coluna*/
         {
-            controller = 1; // Player X win
+            if (((board[i][0] == 'X') && (board[i][1] == 'X') && (board[i][2] == 'X')) || ((board[0][i] == 'X') && (board[1][i] == 'X') && (board[2][i] == 'X')))
+            {
+                printf("Vitoria do player X!");
+                *player1score = *player1score + 1;
+                *loop_control = 1;
+            }
+            if (((board[i][0] == 'O') && (board[i][1] == 'O') && (board[i][2] == 'O')) || ((board[0][i] == 'O') && (board[1][i] == 'O') && (board[2][i] == 'O')))
+            {
+                printf("Vitoria do player O!");
+                *player2score = *player2score + 1;
+                *loop_control = 1;
+            }
         }
-        if (((board[i][0] == 'O') && (board[i][1] == 'O') && (board[i][2] == 'O')) || ((board[0][i] == 'O') && (board[1][i] == 'O') && (board[2][i] == 'O')))
+        /* checa se houve vitória nas diagonais */
+        if (((board[0][0] == 'X') && (board[1][1] == 'X') && (board[2][2] == 'X')) || ((board[2][0] == 'X') && (board[1][1] == 'X') && (board[0][2] == 'X')))
         {
-            controller = 2; // Player O win
+            printf("Vitoria do player X!");
+            *player1score = *player1score + 1;
+            *loop_control = 1;
+        }
+        if (((board[0][0] == 'O') && (board[1][1] == 'O') && (board[2][2] == 'O')) || ((board[2][0] == 'O') && (board[1][1] == 'O') && (board[0][2] == 'O')))
+        {
+            printf("Vitoria do player O!");
+            *player2score = *player2score + 1;
+            *loop_control = 1;
         }
     }
-    if (((board[0][0] == 'X') && (board[1][1] == 'X') && (board[2][2] == 'X')) || ((board[2][0] == 'X') && (board[1][1] == 'X') && (board[0][2] == 'X')))
+}
+
+/* checa se houve empate */
+void checkDraw(int moves_counter, int *loop_control, int *draws)
+{
+    if (moves_counter == (BOARD_ROWS * BOARD_COLUMNS))
     {
-        controller = 1; // Player X win
+        printf("\nDEU VELHA!");
+        *draws = *draws + 1;
+        *loop_control = 1;
     }
-    if (((board[0][0] == 'O') && (board[1][1] == 'O') && (board[2][2] == 'O')) || ((board[2][0] == 'O') && (board[1][1] == 'O') && (board[0][2] == 'O')))
-    {
-        controller = 2; // Player O win
-    }
-    return controller;
 }
 
 /* Inicializa a matriz com espaços*/

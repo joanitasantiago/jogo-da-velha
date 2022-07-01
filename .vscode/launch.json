@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "main",
+            "name": "Jogo da velha",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/main.exe",

@@ -1,7 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
-        "stdlib.h": "c",
-        "print.h": "c"
+        "print.h": "c",
+        "gameplay.h": "c"
     }
 }

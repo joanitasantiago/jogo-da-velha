@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "gameplay.h"
 #include "print.h"
 
 /* Imprime uma quantidade deseja de asteríscos na horizontal */
@@ -26,13 +25,13 @@ void printWelcomeScreen()
 }
 
 /* Imprime o tabuleiro do jogo */
-void printBoard(char board[BOARD_ROWS][BOARD_COLUMNS])
+void printBoard(int rows, int columns, char board[rows][columns])
 {
     printf("\n\t[0] [1] [2] \n\n"); /* imprime uma barra superior com as posições X */
-    for (int i = 0; i < BOARD_ROWS; i++)
+    for (int i = 0; i < rows; i++)
     {
         printf("[%d]\t", i); /* imprime uma barra lateral com as posições Y*/
-        for (int j = 0; j < BOARD_COLUMNS; j++)
+        for (int j = 0; j < columns; j++)
         {
             if (((i != 2) && (j != 2)) || ((i == 2) && (j < 2)))
             {
@@ -56,11 +55,11 @@ void printBoard(char board[BOARD_ROWS][BOARD_COLUMNS])
 void printGameScore(int playerXWins, int playerOwins, int draws)
 {
     printf("\n");
-    printAsterisks(20);
-    printf("-> JOGADOR X: %d pontos\n", playerXWins);
-    printf("-> JOGADOR O: %d pontos\n", playerOwins);
-    printf("-> EMPATES: %d", draws);
-    printAsterisks(20);
+    printAsterisks(25);
+    printf("*  JOGADOR X: %d pontos  *\n", playerXWins);
+    printf("*  JOGADOR O: %d pontos  *\n", playerOwins);
+    printf("*  EMPATES #: %d         *", draws);
+    printAsterisks(25);
     printf("\n");
 }
 
