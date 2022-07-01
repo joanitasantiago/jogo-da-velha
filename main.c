@@ -6,12 +6,11 @@
 #include "print.h"
 #include "gameplay.h"
 
-
 int main(int argc, char const *argv[])
 {
     // * * * Variables * * *
     char game_board[BOARD_ROWS][BOARD_COLUMNS];
-    int menu_option, max_moves = BOARD_ROWS * BOARD_COLUMNS, moves_counter = 0, player_x_wins = 0, player_o_wins = 0, draws = 0, score_controller = 0;
+    int menu_option, loop_control = 0, moves_counter = 0, player_x_wins = 0, player_o_wins = 0, draws = 0;
 
     // * * * Game * * *
     printWelcomeScreen();
@@ -24,62 +23,28 @@ int main(int argc, char const *argv[])
         {
         case 1:
             printf("\n>>> Vamos comecar:\n\n");
-            printBoard(game_board);
+            system("cls");
+            printBoard(BOARD_ROWS, BOARD_COLUMNS, game_board);
             do
             {
-                player1Move(game_board);
+                player1Move(&moves_counter, game_board);
                 system("cls");
-                printBoard(game_board);
-                moves_counter++;
-                if (moves_counter > 4) // só pode ter uma vitória com no mínimo quatro jogadas
+                printBoard(BOARD_ROWS, BOARD_COLUMNS, game_board);
+                checkWin(&player_x_wins, &player_o_wins, &loop_control, moves_counter, game_board);
+                checkDraw(moves_counter, &loop_control, &draws);
+                if (loop_control == 1)
                 {
-                    score_controller = checkWin(score_controller, game_board);
-                    if (score_controller == 1)
-                    {
-                        printf("Vitória do player X!");
-                        player_x_wins++;
-                        break;
-                    }
-                    if (score_controller == 2)
-                    {
-                        printf("Vitória do player O!");
-                        player_x_wins++;
-                        break;
-                    }
-                    if (moves_counter == 9)
-                    {
-                        break;
-                    }
+                    break;
                 }
-                player2Move(game_board);
+                player2Move(&moves_counter, game_board);
                 system("cls");
-                printBoard(game_board);
-                moves_counter++;
-                if (moves_counter > 4) // só pode ter uma vitória com no mínimo quatro jogadas
-                {
-                    score_controller = checkWin(score_controller, game_board);
-                    if (score_controller == 1)
-                    {
-                        printf("Vitória do player X!");
-                        player_x_wins++;
-                        break;
-                    }
-                    if (score_controller == 2)
-                    {
-                        printf("Vitória do player O!");
-                        player_x_wins++;
-                        break;
-                    }
-                }
-            } while (1); //loop infinito
-            if ((moves_counter == max_moves) && (score_controller == 0))
-            {
-                printf("\nDEU VELHA!");
-                draws++;
-            }
+                printBoard(BOARD_ROWS, BOARD_COLUMNS, game_board);
+                checkWin(&player_x_wins, &player_o_wins, &loop_control, moves_counter, game_board);
+                checkDraw(moves_counter, &loop_control, &draws);
+            } while (loop_control == 0); /* continua o loop até uma mudança no placar */
             printGameScore(player_x_wins, player_o_wins, draws);
+            loop_control = 0;
             moves_counter = 0;
-            score_controller = 0;
             menu_option = 10; // pra sair do switch case e voltar ao menu principal
             break;
         case 2:

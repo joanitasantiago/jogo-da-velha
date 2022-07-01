@@ -1,8 +1,6 @@
 #ifndef PRINT_H
 #define PRINT_H
 
-#include "gameplay.h"
-
 /* PROCEDIMENTOS QUE ENVOLVEM SAÍDA DE DADOS DA TELA DO USUÁRIO */
 
 /* Imprime uma quantidade deseja de asteríscos na horizontal */
@@ -12,7 +10,7 @@ void printAsterisks(int number_of_asterisks);
 void printWelcomeScreen();
 
 /* Imprime o tabuleiro do jogo */
-void printBoard(char board[BOARD_ROWS][BOARD_COLUMNS]);
+void printBoard(int rows, int columns, char board[rows][columns]);
 
 /* Imprime o placar do jogo */
 void printGameScore(int playerXWins, int playerOwins, int draws);
